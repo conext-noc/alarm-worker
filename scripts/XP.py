@@ -30,7 +30,7 @@ def client_ports(comm, command, device):
         return
 
     clients = req["data"]
-    client_list = clients_table(comm, command, lst)
+    client_list = clients_table(comm, command, [{"fsp":"0/1/1"}])
 
     for client in clients:
         for client_lst in client_list:
@@ -45,7 +45,8 @@ def client_ports(comm, command, device):
                 alert = condition(client)
                 portCounter(alert, client["plan_name_id"])
                 vp_count["1"]["vp_ttl"] += 1
-                if alert in ["los", "los+"]:
+                if alert in ["los", "los+"] and client["state"] != "deactivated":
+                    print(alert, client)
                     CLIENTS.append(client)
 
     for clt in CLIENTS:
