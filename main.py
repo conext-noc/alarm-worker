@@ -13,6 +13,7 @@ load_dotenv()
 def main():
     clients = []
     count = 1
+    print("worker running...")
     while True:
         if bool(datetime.now().strftime("%I%p") in ['12PM', '04AM', '08AM', '12AM', '04PM', '08PM']):
             print(f"loop #{count}")
