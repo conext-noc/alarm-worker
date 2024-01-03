@@ -3,7 +3,6 @@ import smtplib
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from helpers.handlers.request import db_request
 from dotenv import load_dotenv
 from helpers.constants.definitions import (
     mail_sender,
@@ -14,17 +13,18 @@ from helpers.constants.definitions import (
     mail_server,
     mail_subject,
     mail_table,
-    endpoints,
 )
+from helpers.handlers.printer import log
 
 load_dotenv()
 
 sender_password = os.environ["mail_pass"]
 
 
-def send_mail(clients):
-    dt = datetime.now().strftime("%d/%m/%Y")
-    mail_subject.format(dt)
+def send_mail(clients, date, time):
+    dt = datetime.now().strftime("%d/%m/%Y - %I:%M%p")
+    subject = mail_subject + dt
+    log(subject, "info")
     table_rows = ""
     for client in clients:
         los_time = f'{client["last_down_date"]}_{client["last_down_time"]}'
@@ -39,7 +39,7 @@ def send_mail(clients):
     msg["From"] = mail_sender
     msg["To"] = ", ".join(mail_recipients)
     msg["Cc"] = ", ".join(mail_ccs)
-    msg["Subject"] = mail_subject
+    msg["Subject"] = subject
 
     msg.attach(plain_message)
     msg.attach(html_message)
@@ -49,4 +49,4 @@ def send_mail(clients):
         server.login(mail_sender, sender_password)
         all_recipients = mail_recipients + mail_ccs
         server.sendmail(mail_sender, all_recipients, msg.as_string())
-        print("Alarms Mail Sended successfully!")
+        log("Alarms Mail Sended successfully!", "success")
