@@ -44,8 +44,10 @@ def main():
                 datetime.now().strftime("%I%p")
                 in ["12PM", "04AM", "08AM", "12AM", "04PM", "08PM", "03PM"]
             ):
-                print(
-                    f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}"
+                log(
+                    f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
+                    "normal",
+                    is_dynamic=True
                 )
                 time.sleep(1)
 
