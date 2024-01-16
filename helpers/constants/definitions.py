@@ -19,25 +19,25 @@ olt_devices = {"1": "181.232.180.7", "2": "181.232.180.5", "3": "181.232.180.6"}
 
 mail_message = "Buen día Saludos...\nPor favor comunicarse con los siguientes clientes para corroborar el estado de su servicio, ya que presentan alarma por corte de fibra óptica\n"
 
-mail_recipients = ["ricardo.vera@conext.com.ve"]
-mail_ccs = ["ricardo.vera@conext.com.ve"]
-# mail_recipients = [
-#     "soporte.oz.1@conext.com.ve",
-#     "soporte.oz.2@conext.com.ve",
-#     "dikson.chavez@conext.com.ve",
-#     "soporte_oz@conext.com.ve",
-#     "nelitza.alvarez@conext.com.ve",
-#     "guillermo.rios@conext.com.ve",
-#     "natali.cera@conext.com.ve",
-#     "operaciones@conext.com.ve",
-#     "operaciones.oz@conext.com.ve",
-# ]
-# mail_ccs = ['noc@conext.com.ve']
+# mail_recipients = ["ricardo.vera@conext.com.ve"]
+# mail_ccs = ["ricardo.vera@conext.com.ve"]
+mail_recipients = [
+    "soporte.oz.1@conext.com.ve",
+    "soporte.oz.2@conext.com.ve",
+    "dikson.chavez@conext.com.ve",
+    "soporte_oz@conext.com.ve",
+    "nelitza.alvarez@conext.com.ve",
+    "guillermo.rios@conext.com.ve",
+    "natali.cera@conext.com.ve",
+    "operaciones@conext.com.ve",
+    "operaciones.oz@conext.com.ve",
+]
+mail_ccs = ['noc@conext.com.ve']
 
 mail_sender = "noc@conext.com.ve"
 mail_server = "smtp.gmail.com"
 mail_port = 587
-mail_subject = "test CLIENTES CON AVERIAS "
+mail_subject = "CLIENTES CON AVERIAS "
 mail_table = """
 <table border="1" cellpadding="5">
   <tr>

@@ -24,7 +24,7 @@ def main():
         ):
             print("\n")
             log(f"loop #{count}", "info")
-            for olt in range(1, 1):
+            for olt in range(1, 3):
                 start_time = time.time()
                 community = CommunityData(os.environ["SNMP_COMMUNITY_DESCRIPCION"])
                 target = UdpTransportTarget((olt_devices[str(olt)], 161))
