@@ -30,10 +30,10 @@ def color_formatter(txt, variant):
     return color[paint] + txt + color["end"]
 
 
-def log(value, variant):
+def log(value, variant, is_dynamic=False):
     currTime = datetime.now()
     now = f"[{currTime.hour}:{currTime.minute}:{currTime.second}]"
-    print(color_formatter(value, variant))
+    print(color_formatter(value, variant)) if not is_dynamic else print(color_formatter(value, variant), end='\r')
     print(f"{now}\n{value}", file=open(f"{docs}/logs/{fl}", "a", encoding="utf-8"))
 
 

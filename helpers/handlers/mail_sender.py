@@ -21,7 +21,7 @@ load_dotenv()
 sender_password = os.environ["mail_pass"]
 
 
-def send_mail(clients, date, time):
+def send_mail(clients):
     dt = datetime.now().strftime("%d/%m/%Y - %I:%M%p")
     subject = mail_subject + dt
     log(subject, "info")

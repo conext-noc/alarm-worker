@@ -17,12 +17,14 @@ def main():
     log("worker running...", "info")
     count = 1
     while True:
+        # if True:
         if bool(
-            datetime.now().strftime("%I:%m%p")
-            in ["11:30PM", "03:30AM", "07:30AM", "11:30AM", "03:30PM", "07:30PM"]
+            datetime.now().strftime("%I:%M%p")
+            in ["11:30PM", "03:30AM", "07:30AM", "11:30AM", "03:30PM", "07:30PM",datetime.now().strftime("%I:%M%p")]
         ):
+            print("\n")
             log(f"loop #{count}", "info")
-            for olt in range(1, 2):
+            for olt in range(1, 1):
                 start_time = time.time()
                 community = CommunityData(os.environ["SNMP_COMMUNITY_DESCRIPCION"])
                 target = UdpTransportTarget((olt_devices[str(olt)], 161))
@@ -39,8 +41,8 @@ def main():
             db_request(endpoints["empty_alarms"], {})
             db_request(endpoints["add_alarms"], {"alarms": clients})
             while not bool(
-                datetime.now().strftime("%I:%M%p")
-                in ["12:00PM", "04:00AM", "08:00AM", "12:00AM", "04:00PM", "08:00PM"]
+                datetime.now().strftime("%I%p")
+                in ["12PM", "04AM", "08AM", "12AM", "04PM", "08PM", "03PM"]
             ):
                 print(
                     f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}"
@@ -49,6 +51,7 @@ def main():
 
             send_mail(clients)
             count += 1
+        print(datetime.now().strftime("%I:%M:%S%p"), end="\r")
 
 
 if __name__ == "__main__":

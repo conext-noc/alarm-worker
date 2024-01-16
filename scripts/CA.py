@@ -1,8 +1,10 @@
 import os
 import string
-from helpers.constants.definitions import status_types, desc_types, payload, endpoints
+import time
+from helpers.constants.definitions import status_types, desc_types, payload, endpoints, state_types
 from dotenv import load_dotenv
 from helpers.handlers.hex_handler import hex_to_string
+from helpers.handlers.printer import log
 from helpers.handlers.request import db_request
 from pysnmp.hlapi import (
     ObjectType,
@@ -18,14 +20,19 @@ def los_clients(device, port_list, community, target, context):
     non_repeaters = 10
     max_repetitions = 10
     CLIENTS = []
-
+    count = 0
+    start_time = time.time()
     for port in port_list:
         if port["is_open"] and str(device) == str(port["olt"]):
+            count += 1
             payload["lookup_type"] = "VP"
             payload["lookup_value"] = {
                 "fsp": port["fspo"].split("-")[0],
                 "olt": port["fspo"].split("-")[1],
             }
+            port_len = len([p for p in port_list if p["is_open"]])
+            elapsed_time = time.time()
+            log(f'current fsp : {port["fspo"]:^9} | {count:>4}/{port_len:^4} || {(count/port_len)*100:.2f}% || elapsed time {(elapsed_time - start_time):.2f} s', "info", is_dynamic=True)
             clients_req = db_request(endpoints["get_clients"], payload)["data"]
             for client in clients_req:
                 ont_id = "" if client["onu_id"] == 0 else f".{int(client['onu_id'])-1}"
@@ -61,6 +68,12 @@ def los_clients(device, port_list, community, target, context):
                         + f'{port["oid"]}{ont_id}'
                     )
                 )  # hwGponDeviceOntControlLastDownTime
+                oid_7 = ObjectType(
+                    ObjectIdentity(
+                        os.environ["SNMP_OID_STATE"]
+                        + f'{port["oid"]}{ont_id}'
+                    )
+                )  # hwGponDeviceOntState
 
                 error_indication, error_status, error_index, var_bind_table = next(
                     bulkCmd(
@@ -76,6 +89,7 @@ def los_clients(device, port_list, community, target, context):
                         oid_4,
                         oid_5,
                         oid_6,
+                        oid_7,
                     )
                 )
                 descr = f"{var_bind_table[0]}".split(" = ")[1]
@@ -94,7 +108,7 @@ def los_clients(device, port_list, community, target, context):
                     "ont_serial": f"{var_bind_table[2]}".split(" = ")[1].replace(
                         "0x", ""
                     ),
-                    "ont_state": client["state"],
+                    "ont_state": state_types[str(var_bind_table[6][1].prettyPrint())],
                     "ont_power": int(f"{var_bind_table[3]}".split(" = ")[1]) / 100,
                     "ont_ldc": desc_types[f"{var_bind_table[4]}".split(" = ")[1]],
                     "ont_ldd": hex_to_string(var_bind_table[5][1].prettyPrint())[0],
