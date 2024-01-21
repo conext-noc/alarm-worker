@@ -113,7 +113,7 @@ def los_clients(device, port_list, community, target, context):
                     "ont_ldc": desc_types[f"{var_bind_table[4]}".split(" = ")[1]],
                     "ont_ldd": hex_to_string(var_bind_table[5][1].prettyPrint())[0],
                     "ont_ldt": hex_to_string(var_bind_table[5][1].prettyPrint())[1],
-                    "plan_name": client["plan_name_id"],
+                    "plan_name_id": client["plan_name_id"],
                     "spid": client["spid"],
                     "device": client["device"]
                     .replace("EchoLife", "")
@@ -130,6 +130,8 @@ def los_clients(device, port_list, community, target, context):
                             "last_down_time": ont["ont_ldt"],
                             "last_down_date": ont["ont_ldd"],
                             "last_down_cause": ont["ont_ldc"],
+                            "name": f'{ont["name_1"]} {ont["name_2"]}',
+                            "plan_name_id": ont["plan_name_id"],
                         }
                     )
     return CLIENTS

@@ -26,14 +26,16 @@ def send_mail(clients):
     subject = mail_subject + dt
     log(subject, "info")
     table_rows = ""
+    t_greet = datetime.now().time().hour
+    greet = "Buenos Días" if t_greet < 12 else "Buenas Tardes" if 12 <= t_greet < 18 else "Buenas Noches"
     for client in clients:
         los_time = f'{client["last_down_date"]}_{client["last_down_time"]}'
         table_rows += f'<tr><td>{client["contract"]}</td><td>{client["name"]}</td><td>{client["plan_name_id"]}</td><td>{los_time}</td></tr>'
+    table = mail_table.format(rows=table_rows)
+    message = mail_message.format(greet=greet)
 
-    mail_table.format(table_rows)
-
-    plain_message = MIMEText(mail_message, "plain")
-    html_message = MIMEText(mail_table, "html")
+    plain_message = MIMEText(message, "plain")
+    html_message = MIMEText(table, "html")
 
     msg = MIMEMultipart()
     msg["From"] = mail_sender

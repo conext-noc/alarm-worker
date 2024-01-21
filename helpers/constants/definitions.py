@@ -17,7 +17,7 @@ endpoints = {
 }
 olt_devices = {"1": "181.232.180.7", "2": "181.232.180.5", "3": "181.232.180.6"}
 
-mail_message = "Buen día Saludos...\nPor favor comunicarse con los siguientes clientes para corroborar el estado de su servicio, ya que presentan alarma por corte de fibra óptica\n"
+mail_message = "{greet}, Saludos...\nPor favor comunicarse con los siguientes clientes para corroborar el estado de su servicio, ya que presentan alarma por corte de fibra óptica\n"
 
 # mail_recipients = ["ricardo.vera@conext.com.ve"]
 # mail_ccs = ["ricardo.vera@conext.com.ve"]
@@ -46,7 +46,7 @@ mail_table = """
     <th>PLAN</th>
     <th>TIEMPO DE AVERIA</th>
   </tr>
-  {}
+  {rows}
 </table>
 """
 
