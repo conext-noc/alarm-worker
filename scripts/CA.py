@@ -92,7 +92,7 @@ def los_clients(device, port_list, community, target, context):
                         oid_7,
                     )
                 )
-                print(var_bind_table[0])
+                print(var_bind_table)
                 descr = f"{var_bind_table[0]}".split(" = ")[1]
                 ont = {
                     "frame": client["frame"],
