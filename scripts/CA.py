@@ -92,7 +92,6 @@ def los_clients(device, port_list, community, target, context):
                         oid_7,
                     )
                 )
-                # print(error_indication, error_status, error_index)
                 if error_indication is not None:
                     continue
                 descr = f"{var_bind_table[0]}".split(" = ")[1]

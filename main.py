@@ -16,11 +16,10 @@ def main():
     clients = []
     log("worker running...", "info")
     while True:
-        # if bool(
-        #     datetime.now().strftime("%I:%M%p")
-        #     in ["11:30PM", "03:30AM", "07:30AM", "11:30AM", "03:30PM", "07:30PM"]
-        # ):
-        if True:
+        if bool(
+            datetime.now().strftime("%I:%M%p")
+            in ["11:30PM", "03:30AM", "07:30AM", "11:30AM", "03:30PM", "07:30PM"]
+        ):
             print("\n")
             for olt in range(1, 3):
                 log(f"loop olt #{olt}", "info")
@@ -40,26 +39,26 @@ def main():
                 )
             db_request(endpoints["empty_alarms"], {})
             db_request(endpoints["add_alarms"], {"alarms": clients})
-            # while not bool(
-            #     datetime.now().strftime("%I%p")
-            #     in [
-            #         "12PM",
-            #         "04AM",
-            #         "08AM",
-            #         "12AM",
-            #         "04PM",
-            #         "08PM",
-            #         "03PM",
-            #     ]
-            # ):
-            #     log(
-            #         f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
-            #         "normal",
-            #         is_dynamic=True,
-            #     )
-            #     time.sleep(1)
+            while not bool(
+                datetime.now().strftime("%I%p")
+                in [
+                    "12PM",
+                    "04AM",
+                    "08AM",
+                    "12AM",
+                    "04PM",
+                    "08PM",
+                    "03PM",
+                ]
+            ):
+                log(
+                    f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
+                    "normal",
+                    is_dynamic=True,
+                )
+                time.sleep(1)
             print("\n")
-            # send_mail(clients)
+            send_mail(clients)
         print(datetime.now().strftime("%I:%M:%S%p"), end="\r")
 
 
