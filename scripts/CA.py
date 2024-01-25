@@ -104,7 +104,7 @@ def los_clients(device, port_list, community, target, context):
                     "ont_id": client["onu_id"],
                     "ont_descr": descr,
                     "name_1": descr.split(" ")[0],
-                    "name_2": descr.split(" ")[1],
+                    "name_2": (descr.split(" ")[1] if len(descr.split(" ")) > 1 else " "),
                     "contract": descr.split(" ")[-1],
                     "ont_status": status_types[f"{var_bind_table[1]}".split(" = ")[1]],
                     "ont_serial": f"{var_bind_table[2]}".split(" = ")[1].replace(
