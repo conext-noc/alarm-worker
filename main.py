@@ -20,6 +20,7 @@ def main():
             datetime.now().strftime("%I:%M%p")
             in ["11:30PM", "03:30AM", "07:30AM", "11:30AM", "03:30PM", "07:30PM"]
         ):
+        # if True:
             print("\n")
             for olt in range(1, 3):
                 log(f"loop olt #{olt}", "info")
@@ -37,8 +38,10 @@ def main():
                     f"the ttl amount of time for a given olt [olt {olt}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min",
                     "info",
                 )
+            clients_set = set()
+            filtered_clients = [item for item in clients if (contract := item["contract"]) not in clients_set and not clients_set.add(contract)]
             db_request(endpoints["empty_alarms"], {})
-            db_request(endpoints["add_alarms"], {"alarms": clients})
+            db_request(endpoints["add_alarms"], {"alarms": filtered_clients})
             while not bool(
                 datetime.now().strftime("%I%p")
                 in [
@@ -58,7 +61,8 @@ def main():
                 )
                 time.sleep(1)
             print("\n")
-            send_mail(clients)
+            send_mail(filtered_clients)
+            print(filtered_clients)
         print(datetime.now().strftime("%I:%M:%S%p"), end="\r")
 
 
