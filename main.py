@@ -62,7 +62,7 @@ def main():
                 time.sleep(1)
             print("\n")
             send_mail(filtered_clients)
-            print(filtered_clients)
+            # print(filtered_clients)
         print(datetime.now().strftime("%I:%M:%S%p"), end="\r")
 
 
