@@ -25,12 +25,9 @@ mail_recipients = [
     "soporte.oz.1@conext.com.ve",
     "soporte.oz.2@conext.com.ve",
     "dikson.chavez@conext.com.ve",
-    "soporte_oz@conext.com.ve",
-    "nelitza.alvarez@conext.com.ve",
     "guillermo.rios@conext.com.ve",
     "natali.cera@conext.com.ve",
     "operaciones@conext.com.ve",
-    "operaciones.oz@conext.com.ve",
 ]
 mail_ccs = ['noc@conext.com.ve']
 
