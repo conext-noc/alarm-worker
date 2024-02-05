@@ -18,7 +18,7 @@ def main():
     while True:
         if bool(
             datetime.now().strftime("%I:%M%p")
-            in ["07:30AM", "11:30AM", "03:30PM"]
+            in ["07:30AM", "11:30AM"]
         ):
         # if True:
             print("\n")
@@ -43,11 +43,9 @@ def main():
             db_request(endpoints["empty_alarms"], {})
             db_request(endpoints["add_alarms"], {"alarms": filtered_clients})
             while not bool(
-                datetime.now().strftime("%I%p")
+                datetime.now().strftime("%I:%M%p")
                 in [
-                    "08AM",
-                    "12AM",
-                    "04PM",
+                    "12:00AM"
                 ]
             ):
                 log(
