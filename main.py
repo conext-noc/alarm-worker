@@ -19,7 +19,7 @@ def main():
     while True:
         if bool(
             datetime.now().strftime("%I:%M%p")
-            in ["07:30AM", "12:00AM","4:00PM"]
+            in ["07:30AM", "12:00PM","4:00PM"]
         ):
         # if True:
             print("\n")
@@ -33,7 +33,7 @@ def main():
             while not bool(
                 datetime.now().strftime("%I:%M%p")
                 in [
-                    "07:40AM","12:10AM","4:10PM"
+                    "07:40AM","12:10PM","4:10PM"
                 ]
             ):
                 log(

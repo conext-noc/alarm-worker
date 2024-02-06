@@ -55,7 +55,7 @@ def SNMP_DESC(op,community, host, oid,port,fsp_inicial=""):
                             "Last_Down_Time": "",
                         } 
         # print_fsp(fsp,'success')
-                    print(fsp)
+                    # print(fsp)
                     
 def SNMP_PW(op,community, host, oid,port,fsp_inicial=""):
   
