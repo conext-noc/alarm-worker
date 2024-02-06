@@ -38,8 +38,10 @@ mail_subject = "CLIENTES CON AVERIAS "
 mail_table = """
 <table border="1" cellpadding="5">
   <tr>
+    <th>CONTRATO</th>
     <th>NOMBRE COMPLETO</th>
     <th>SERIAL</th>
+    <th>CAUSA</th>
     <th>TIEMPO DE AVERIA</th>
   </tr>
   {rows}

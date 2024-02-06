@@ -13,7 +13,7 @@ from copy import copy
 
 
 threads = []
-table = {}
+table = []
 load_dotenv()
 
 def CA(olt_ip):
@@ -28,8 +28,7 @@ def CA(olt_ip):
                     f"the ttl amount of time for a given olt [olt {olt_ip}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min",
                     "info",
                 )
-    
-    null_datos
+    # null_datos
     
     return table
 
@@ -47,23 +46,23 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
         # thread.start()
         # threads.append(thread)
         #STATUS
-        thread = threading.Timer(3,SNMP_STATUS, args=("next",comunity, host, oid_state,161))
+        thread = threading.Timer(4,SNMP_STATUS, args=("next",comunity, host, oid_state,161))
         thread.start()
         threads.append(thread)
         #LAST DOWN CAUSE
-        thread = threading.Timer(3,SNMP_LDC, args=("next",comunity, host, oid_last_down_couse,161))
+        thread = threading.Timer(4,SNMP_LDC, args=("next",comunity, host, oid_last_down_couse,161))
         thread.start()
         threads.append(thread)
         # #LAST DOWN TIME
-        thread = threading.Timer(3,SNMP_LDT, args=("next",comunity, host, oid_last_down_time,161))
+        thread = threading.Timer(4,SNMP_LDT, args=("next",comunity, host, oid_last_down_time,161))
         thread.start()
         threads.append(thread)
         #STATE
-        thread = threading.Timer(3,SNMP_STATE, args=("next",comunity, host, oid_status,161))
+        thread = threading.Timer(4,SNMP_STATE, args=("next",comunity, host, oid_status,161))
         thread.start()
         threads.append(thread)
         #SN
-        thread = threading.Timer(3,SNMP_SN, args=("next",comunity, host, oid_sn,161))
+        thread = threading.Timer(4,SNMP_SN, args=("next",comunity, host, oid_sn,161))
         thread.start()
         threads.append(thread)
         
@@ -73,13 +72,16 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
         new_datos = datos
         # table(datos)
         for keys,valores in new_datos.items():
-            if valores['State'] == "active" and valores['Status'] == "offline" and valores['Last_Down_Cause'] == "LOSi/LOBi":
-                table.append([valores['Nombre'],valores['Sn'],valores['Last_Down_Cause'],valores['Last_Down_Time']])
-        seguir = False
+            
+            if ('State' in valores and valores['State'] == "active") and valores['Status'] == "offline" and valores['Last_Down_Cause'] == "LOSi/LOBi":
+                Nombre = valores['Nombre'].split()[:-1]
+                Contrato = valores['Nombre'].split()[-1]
+                table.append([Contrato," ".join(Nombre),valores['Sn'],valores['Last_Down_Cause'],valores['Last_Down_Time']])
+                # table[keys] += new_datos[keys]
 
-        new_datos[:]=[]
-        new_datos.clear()
-        new_datos ={}
+                new_datos[keys].clear()
+        seguir = False
 
 def sending_mail():
     send_mail(table)
+    table.clear()

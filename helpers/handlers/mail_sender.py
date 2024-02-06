@@ -30,7 +30,7 @@ def send_mail(clients):
     greet = "Buenos Días" if t_greet < 12 else "Buenas Tardes" if 12 <= t_greet < 18 else "Buenas Noches"
     for client in clients:
         print()
-        table_rows += f'<tr><td>{client[0]}</td><td>{client[1]}</td><td>{client[3]}</td></tr>'
+        table_rows += f'<tr><td>{client[0]}</td><td>{client[1]}</td><td>{client[2]}</td><td>{client[3]}</td><td>{client[4]}</td></tr>'
     table = mail_table.format(rows=table_rows)
     message = mail_message.format(greet=greet)
 
