@@ -19,16 +19,16 @@ olt_devices = {"1": "181.232.180.7", "2": "181.232.180.5", "3": "181.232.180.6"}
 
 mail_message = "{greet}, Saludos...\nPor favor comunicarse con los siguientes clientes para corroborar el estado de su servicio, ya que presentan alarma por corte de fibra óptica\n"
 
-mail_recipients = ["cesar.sanchez@conext.com.ve"]
+# mail_recipients = ["cesar.sanchez@conext.com.ve"]
 # mail_ccs = ["ricardo.vera@conext.com.ve"]
-# mail_recipients = [
-#     "soporte.oz.1@conext.com.ve",
-#     "soporte.oz.2@conext.com.ve",
-#     "dikson.chavez@conext.com.ve",
-#     "guillermo.rios@conext.com.ve",
-#     "natali.cera@conext.com.ve",
-#     "operaciones@conext.com.ve",
-# ]
+mail_recipients = [
+    "soporte.oz.1@conext.com.ve",
+    "soporte.oz.2@conext.com.ve",
+    "dikson.chavez@conext.com.ve",
+    "guillermo.rios@conext.com.ve",
+    "natali.cera@conext.com.ve",
+    "operaciones@conext.com.ve",
+]
 mail_ccs = ['noc@conext.com.ve']
 
 mail_sender = "noc@conext.com.ve"
