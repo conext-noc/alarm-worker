@@ -71,16 +71,25 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
 
         new_datos = datos
         # table(datos)
-        for keys,valores in new_datos.items():
+        for keys,value in new_datos.items():
             
-            if ('State' in valores and valores['State'] == "active") and valores['Status'] == "offline" and valores['Last_Down_Cause'] == "LOSi/LOBi":
-                Nombre = valores['Nombre'].split()[:-1]
-                Contrato = valores['Nombre'].split()[-1]
-                table.append([Contrato," ".join(Nombre),valores['Sn'],valores['Last_Down_Cause'],valores['Last_Down_Time']])
+            if ('State' in value and value['State'] == "active") and value['Status'] == "offline" and value['Last_Down_Cause'] == "LOSi/LOBi":
+                name = value['name'].split()[:-1]
+                contract = value['name'].split()[-1]
+                last_down_date_in_days = value['Last_Down_Time'].split()[0]
+                last_down_time_in_hours = value['Last_Down_Time'].split()[1]
+                # table.append(contract," ".join(name),value['Sn'],value['Last_Down_Cause'],value['Last_Down_Time'])
+                table.append({
+                    "contract":contract,
+                    "last_down_time":last_down_time_in_hours,
+                    "last_down_date":last_down_date_in_days,
+                    "last_down_cause":value['Last_Down_Cause'],
+                })
                 # table[keys] += new_datos[keys]
 
                 new_datos[keys].clear()
         seguir = False
+        
 
 def sending_mail():
     send_mail(table)

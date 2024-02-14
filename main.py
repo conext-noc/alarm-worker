@@ -19,17 +19,19 @@ def main():
     while True:
         if bool(
             datetime.now().strftime("%I:%M%p")
-            in ["07:30AM", "12:00PM","04:00PM"]
+            in ["03:30AM","05:30AM","07:30AM","09:30AM","10:30AM","12:00PM","02:30PM","04:00PM","06:30PM","08:30PM","10:30PM""12:00AM",]
         ):
         # if True:
             print("\n")
             for olt in range(1, 3):
                 log(f"loop olt #{olt}", "info")
                 # community = CommunityData(os.environ["SNMP_COMMUNITY_DESCRIPCION"])
-                CA(olt_devices[str(olt)])
+                resp = CA(olt_devices[str(olt)])
                 
                 print("\n")
-                
+            # print(resp)
+            db_request(endpoints["empty_alarms"], {})
+            db_request(endpoints["add_alarms"], {"alarms": resp})
             while not bool(
                 datetime.now().strftime("%I:%M%p")
                 in [

@@ -46,7 +46,7 @@ def SNMP_DESC(op,community, host, oid,port,fsp_inicial=""):
                     datos[fsp+"-"+ont_id] = {
                             "fsp": fsp,
                             "ont_id": ont_id,
-                            "Nombre": resp,
+                            "name": resp,
                             "State": "",
                             "Status": "",
                             "Sn":"",
