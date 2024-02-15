@@ -35,7 +35,7 @@ def main():
             while not bool(
                 datetime.now().strftime("%I:%M%p")
                 in [
-                    "07:45AM","12:15PM","04:15PM"
+                    "07:45AM","12:15PM","04:15PM",
                 ]
             ):
                 log(
@@ -45,7 +45,9 @@ def main():
                 )
                 time.sleep(1)
             print("\n")
-            sending_mail()
+            print(resp)
+            sending_mail(resp)
+            
             
             # print(filtered_clients)
         print(datetime.now().strftime("%I:%M:%S%p"), end="\r")

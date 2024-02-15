@@ -91,6 +91,6 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
         seguir = False
         
 
-def sending_mail():
-    send_mail(table)
+def sending_mail(data):
+    send_mail(data)
     table.clear()
