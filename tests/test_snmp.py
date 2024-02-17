@@ -57,7 +57,7 @@ class TestSnmpBulkCompiler(unittest.TestCase):
         }
         clients_req = db_request(endpoints["get_clients"], payload)["data"]
         for client in clients_req:
-            ont_id = "" if client[ "onu_id"] == 0 else f".{int(client['onu_id'])-1}"
+            ont_id = "" if client["onu_id"] == 0 else f".{int(client['onu_id'])-1}"
             snmp = SNMPBulk(
                 olt_devices[str(1)],
                 f'{snmp_oid["descr"]}.{port["oid"]}.{ont_id}',

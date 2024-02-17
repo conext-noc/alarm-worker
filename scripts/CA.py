@@ -1,7 +1,13 @@
 import os
 import string
 import time
-from helpers.constants.definitions import status_types, desc_types, payload, endpoints, state_types
+from helpers.constants.definitions import (
+    status_types,
+    desc_types,
+    payload,
+    endpoints,
+    state_types,
+)
 from dotenv import load_dotenv
 from helpers.handlers.hex_handler import hex_to_string
 from helpers.handlers.printer import log
@@ -32,7 +38,11 @@ def los_clients(device, port_list, community, target, context):
             }
             port_len = len([p for p in port_list if p["is_open"]])
             elapsed_time = time.time()
-            log(f'current fsp : {port["fspo"]:^9} | {count:>4}/{port_len:^4} || {(count/port_len)*100:.2f}% || elapsed time {(elapsed_time - start_time):.2f} s', "info", is_dynamic=True)
+            log(
+                f'current fsp : {port["fspo"]:^9} | {count:>4}/{port_len:^4} || {(count/port_len)*100:.2f}% || elapsed time {(elapsed_time - start_time):.2f} s',
+                "info",
+                is_dynamic=True,
+            )
             clients_req = db_request(endpoints["get_clients"], payload)["data"]
             for client in clients_req:
                 ont_id = "" if client["onu_id"] == 0 else f".{int(client['onu_id'])-1}"
@@ -70,8 +80,7 @@ def los_clients(device, port_list, community, target, context):
                 )  # hwGponDeviceOntControlLastDownTime
                 oid_7 = ObjectType(
                     ObjectIdentity(
-                        os.environ["SNMP_OID_STATE"]
-                        + f'{port["oid"]}{ont_id}'
+                        os.environ["SNMP_OID_STATE"] + f'{port["oid"]}{ont_id}'
                     )
                 )  # hwGponDeviceOntState
 
@@ -104,7 +113,9 @@ def los_clients(device, port_list, community, target, context):
                     "ont_id": client["onu_id"],
                     "ont_descr": descr,
                     "name_1": descr.split(" ")[0],
-                    "name_2": (descr.split(" ")[1] if len(descr.split(" ")) > 1 else " "),
+                    "name_2": (
+                        descr.split(" ")[1] if len(descr.split(" ")) > 1 else " "
+                    ),
                     "contract": descr.split(" ")[-1],
                     "ont_status": status_types[f"{var_bind_table[1]}".split(" = ")[1]],
                     "ont_serial": f"{var_bind_table[2]}".split(" = ")[1].replace(

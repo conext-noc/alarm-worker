@@ -1,3 +1,5 @@
+from pysnmp.hlapi import bulkCmd, nextCmd, getCmd
+
 headers = {"Content-Type": "application/json"}
 domain = "http://db-api.conext.net.ve"
 # domain = "http://localhost:8000"
@@ -32,7 +34,7 @@ mail_recipients = [
     "operaciones@conext.com.ve",
     "operaciones.oz@conext.com.ve",
 ]
-mail_ccs = ['noc@conext.com.ve']
+mail_ccs = ["noc@conext.com.ve"]
 
 mail_sender = "noc@conext.com.ve"
 mail_server = "smtp.gmail.com"
@@ -88,6 +90,7 @@ snmp_oid = {
     "lddt": "1.3.6.1.4.1.2011.6.128.1.1.2.46.1.23",
     "status": ".1.3.6.1.4.1.2011.6.128.1.1.2.46.1.15",
     "serial": ".1.3.6.1.4.1.2011.6.128.1.1.2.43.1.3",
+    "state": "1.3.6.1.4.1.2011.6.128.1.1.2.46.1.1",
 }
 
 
@@ -117,3 +120,10 @@ snmp_down_causes = {
 }
 
 snmp_status_types = {"1": "online", "2": "offline"}
+
+
+OPERATION = {
+    "next": nextCmd,
+    "get": getCmd,
+    "bulk": bulkCmd,
+}
