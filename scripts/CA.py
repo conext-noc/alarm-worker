@@ -81,7 +81,7 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
                 # table.append(contract," ".join(name),value['Sn'],value['Last_Down_Cause'],value['Last_Down_Time'])
                 table.append({
                     "contract":contract,
-                    "name":name,
+                    "name":f"{name[0]} {name[1]}" if len(name) > 1 else  f"{name[0]}",
                     "last_down_time":last_down_time_in_hours,
                     "last_down_date":last_down_date_in_days,
                     "last_down_cause":value['Last_Down_Cause'],
