@@ -27,7 +27,11 @@ def send_mail(clients):
     log(subject, "info")
     table_rows = ""
     t_greet = datetime.now().time().hour
-    greet = "Buenos Días" if t_greet < 12 else "Buenas Tardes" if 12 <= t_greet < 18 else "Buenas Noches"
+    greet = (
+        "Buenos Días"
+        if t_greet < 12
+        else "Buenas Tardes" if 12 <= t_greet < 18 else "Buenas Noches"
+    )
     for client in clients:
         los_time = f'{client["last_down_date"]}_{client["last_down_time"]}'
         table_rows += f'<tr><td>{client["contract"]}</td><td>{client["name"]}</td><td>{client["plan_name_id"]}</td><td>{los_time}</td></tr>'
