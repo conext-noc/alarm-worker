@@ -1,6 +1,6 @@
 from helpers.constants.definitions import *
 from helpers.handlers.formatter import print_color
-from helpers.handlers.snmp_funtion import SNMP_DESC,SNMP_PW,SNMP_STATUS,SNMP_Master
+from helpers.handlers.snmp_funtion import SNMP_Master
 from helpers.constants.definitions import *
 from helpers.handlers.snmp_funtion import *
 from helpers.handlers.mail_sender import send_mail
@@ -41,10 +41,6 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
         thread = threading.Thread(target=SNMP_Master, args=("next",comunity, host, oid_desc,161,"desc"))
         thread.start()
         threads.append(thread)
-        # #POTENCIA
-        # thread = threading.Timer(1,SNMP_PW, args=("next",comunity, host, oid_pw,161,fsp_inicial))
-        # thread.start()
-        # threads.append(thread)
         #STATUS
         thread = threading.Timer(4,SNMP_Master, args=("next",comunity, host, oid_state,161,"status"))
         thread.start()
