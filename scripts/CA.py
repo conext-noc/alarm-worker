@@ -1,6 +1,6 @@
 from helpers.constants.definitions import *
 from helpers.handlers.formatter import print_color
-from helpers.handlers.snmp_funtion import SNMP_DESC,SNMP_PW,SNMP_STATUS
+from helpers.handlers.snmp_funtion import SNMP_DESC,SNMP_PW,SNMP_STATUS,SNMP_Master
 from helpers.constants.definitions import *
 from helpers.handlers.snmp_funtion import *
 from helpers.handlers.mail_sender import send_mail
@@ -38,7 +38,7 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
     seguir = True
     while seguir:
         #DESCRIPTION
-        thread = threading.Thread(target=SNMP_DESC, args=("next",comunity, host, oid_desc,161))
+        thread = threading.Thread(target=SNMP_Master, args=("next",comunity, host, oid_desc,161,"desc"))
         thread.start()
         threads.append(thread)
         # #POTENCIA
@@ -46,23 +46,23 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
         # thread.start()
         # threads.append(thread)
         #STATUS
-        thread = threading.Timer(4,SNMP_STATUS, args=("next",comunity, host, oid_state,161))
+        thread = threading.Timer(4,SNMP_Master, args=("next",comunity, host, oid_state,161,"status"))
         thread.start()
         threads.append(thread)
         #LAST DOWN CAUSE
-        thread = threading.Timer(4,SNMP_LDC, args=("next",comunity, host, oid_last_down_couse,161))
+        thread = threading.Timer(4,SNMP_Master, args=("next",comunity, host, oid_last_down_couse,161,"ldc"))
         thread.start()
         threads.append(thread)
         # #LAST DOWN TIME
-        thread = threading.Timer(4,SNMP_LDT, args=("next",comunity, host, oid_last_down_time,161))
+        thread = threading.Timer(4,SNMP_Master, args=("next",comunity, host, oid_last_down_time,161,"ldt"))
         thread.start()
         threads.append(thread)
         #STATE
-        thread = threading.Timer(4,SNMP_STATE, args=("next",comunity, host, oid_status,161))
+        thread = threading.Timer(4,SNMP_Master, args=("next",comunity, host, oid_status,161,"state"))
         thread.start()
         threads.append(thread)
         #SN
-        thread = threading.Timer(4,SNMP_SN, args=("next",comunity, host, oid_sn,161))
+        thread = threading.Timer(4,SNMP_Master, args=("next",comunity, host, oid_sn,161,"sn"))
         thread.start()
         threads.append(thread)
         
@@ -78,7 +78,6 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
                 contract = value['name'].split()[-1]
                 last_down_date_in_days = value['Last_Down_Time'].split()[0]
                 last_down_time_in_hours = value['Last_Down_Time'].split()[1]
-                # table.append(contract," ".join(name),value['Sn'],value['Last_Down_Cause'],value['Last_Down_Time'])
                 table.append({
                     "contract":contract,
                     "name":f"{name[0]} {name[1]}" if len(name) > 1 else  f"{name[0]}",

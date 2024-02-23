@@ -19,3 +19,4 @@ def date_hex_formatter(hex):
 
     plain_text = f"{int(año,16)}-{int(mes,16)}-{int(dia,16)} {int(hora,16)}:{int(minuto,16)}:{int(segundo,16)}"
     return plain_text
+
