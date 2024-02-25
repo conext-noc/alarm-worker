@@ -1,0 +1,58 @@
+[02/25/2024 - 10:21:56]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:54}
+[02/25/2024 - 10:21:56]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:21:58]::[INFO]::current fsp :  0/1/0-1  |    1/206  || 0.49% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:07]::[INFO]::current fsp :  0/1/1-1  |    2/206  || 0.97% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:13]::[INFO]::current fsp :  0/1/2-1  |    3/206  || 1.46% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:19]::[INFO]::current fsp :  0/1/3-1  |    4/206  || 1.94% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:28]::[INFO]::current fsp :  0/1/4-1  |    5/206  || 2.43% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:35]::[INFO]::current fsp :  0/1/5-1  |    6/206  || 2.91% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:43]::[INFO]::current fsp :  0/1/6-1  |    7/206  || 3.40% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:47]::[INFO]::current fsp :  0/1/7-1  |    8/206  || 3.88% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:22:51]::[INFO]::current fsp :  0/1/8-1  |    9/206  || 4.37% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:02]::[INFO]::current fsp :  0/1/9-1  |   10/206  || 4.85% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:18]::[INFO]::current fsp : 0/1/10-1  |   11/206  || 5.34% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:26]::[INFO]::current fsp : 0/1/11-1  |   12/206  || 5.83% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:30]::[INFO]::current fsp : 0/1/12-1  |   13/206  || 6.31% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:32]::[INFO]::current fsp : 0/1/13-1  |   14/206  || 6.80% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:37]::[INFO]::current fsp : 0/1/14-1  |   15/206  || 7.28% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:44]::[INFO]::current fsp : 0/1/15-1  |   16/206  || 7.77% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:47]::[INFO]::current fsp :  0/2/0-1  |   17/206  || 8.25% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:23:54]::[INFO]::current fsp :  0/2/1-1  |   18/206  || 8.74% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:24:09]::[INFO]::current fsp :  0/2/2-1  |   19/206  || 9.22% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:24:25]::[INFO]::current fsp :  0/2/3-1  |   20/206  || 9.71% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:24:33]::[INFO]::current fsp :  0/2/4-1  |   21/206  || 10.19% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:24:40]::[INFO]::current fsp :  0/2/5-1  |   22/206  || 10.68% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:24:49]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:54}
+[02/25/2024 - 10:24:49]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:24:50]::[INFO]::current fsp :  0/1/0-1  |    1/206  || 0.49% || elapsed time 1.52 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:24:55]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:54}
+[02/25/2024 - 10:24:55]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:24:57]::[INFO]::current fsp :  0/1/0-1  |    1/206  || 0.49% || elapsed time 1.37 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:25:28]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:55}
+[02/25/2024 - 10:25:28]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/main.py:58}
+[02/25/2024 - 10:25:29]::[INFO]::current fsp :  0/1/0-1  |    1/206  || 0.49% || elapsed time 1.34 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:25:38]::[INFO]::current fsp :  0/1/1-1  |    2/206  || 0.97% || elapsed time 1.34 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:25:40]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:54}
+[02/25/2024 - 10:25:40]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:25:41]::[INFO]::current fsp :  0/1/0-1  |    1/206  || 0.49% || elapsed time 1.34 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:25:50]::[INFO]::current fsp :  0/1/1-1  |    2/206  || 0.97% || elapsed time 1.34 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:25:57]::[INFO]::current fsp :  0/1/2-1  |    3/206  || 1.46% || elapsed time 1.34 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:26:03]::[INFO]::current fsp :  0/1/3-1  |    4/206  || 1.94% || elapsed time 1.34 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:26:18]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:54}
+[02/25/2024 - 10:26:18]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:26:20]::[INFO]::current fsp :  0/1/0-1  |    1/206  || 0.49% || elapsed time 1.33 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:27:33]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:27:33]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/main.py:60}
+[02/25/2024 - 10:27:35]::[INFO]::current fsp :  0/1/0-1  |    1/206  || 0.49% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:27:45]::[INFO]::current fsp :  0/1/1-1  |    2/206  || 0.97% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:27:51]::[INFO]::current fsp :  0/1/2-1  |    3/206  || 1.46% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:27:57]::[INFO]::current fsp :  0/1/3-1  |    4/206  || 1.94% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:28:06]::[INFO]::current fsp :  0/1/4-1  |    5/206  || 2.43% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:28:12]::[INFO]::current fsp :  0/1/5-1  |    6/206  || 2.91% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:28:18]::[INFO]::current fsp :  0/1/6-1  |    7/206  || 3.40% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:28:21]::[INFO]::current fsp :  0/1/7-1  |    8/206  || 3.88% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:28:25]::[INFO]::current fsp :  0/1/8-1  |    9/206  || 4.37% || elapsed time 1.38 s |> {/home/rick/conext/worker/scripts/CA.py:38}
+[02/25/2024 - 10:35:10]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:35:47]::[INFO]::worker running... |> {/home/rick/conext/worker/main.py:57}
+[02/25/2024 - 10:35:47]::[INFO]::loop olt #1 |> {/home/rick/conext/worker/scripts/CA.py:29}
+[02/25/2024 - 10:35:48]::[INFO]::current fsp :  0/1/0-1  |    1/158  || 0.63% || elapsed time 1.53 s |> {/home/rick/conext/worker/scripts/CA.py:41}

@@ -33,6 +33,7 @@ def send_mail(clients):
         else "Buenas Tardes" if 12 <= t_greet < 18 else "Buenas Noches"
     )
     for client in clients:
+        print(client)
         table_rows += f'<tr><td>{client["contract"]}</td><td>{client["name_1"]} {client["name_2"]}</td><td>{client["last_down_time"]}</td><td>{client["last_down_date"]}</td><td>{client["last_down_cause"]}</td></tr>'
     table = mail_table.format(rows=table_rows)
     message = mail_message.format(greet=greet)

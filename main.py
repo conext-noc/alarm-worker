@@ -19,7 +19,7 @@ class MainThread(threading.Thread):
     def run(self):
         log("main thread running...", "info")
         while not bool(
-            datetime.now().strftime("%I%p") in ["07:45AM", "12:15PM", "04:15PM"]
+            datetime.now().strftime("%I:%M%p") in ["07:45AM", "12:15PM", "04:15PM", "10:27AM"]
         ):
             log(
                 f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
@@ -35,9 +35,12 @@ class MainThread(threading.Thread):
                 endpoints["get_client"],
                 {
                     "lookup_type": "C",
-                    "lookup_value": {"contract": alarm["contract"], "olt": "*"},
+                    "lookup_value": {"contract": alarm["contract_id"], "olt": "*"},
                 },
             )["data"]
+            client["last_down_time"] = alarm["last_down_time"]
+            client["last_down_date"] = alarm["last_down_date"]
+            client["last_down_cause"] = alarm["last_down_cause"]
             filtered_clients.append(client)
 
         send_mail(filtered_clients)
@@ -53,11 +56,8 @@ class WorkerThread(threading.Thread):
         )
         logging.info("worker running...")
         while True:
-            for device in range(1, 3):
-                logging.info(f"loop olt #{device}")
-                olt = olt_devices[str(device)]
-                los_clients(olt, device)
-                time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
+            los_clients()
+            time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
 
 
 if __name__ == "__main__":
