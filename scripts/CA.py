@@ -25,17 +25,17 @@ def los_clients():
         (os.environ["SNMP_OID_STATE"], "state"),
         (os.environ["SNMP_OID_MAC-SERIAL"], "serial"),
     ]
-    for device in range(1, 3):
-        logging.info(f"loop olt #{device}")
-        olt = olt_devices[str(device)]
+    for olt_id in range(1, 3):
+        logging.info(f"loop olt #{olt_id}")
+        olt = olt_devices[str(olt_id)]
         snmp = SNMP(olt)
         ports = db_request(endpoints["get_ports"], {})["data"]
         ports = sorted(ports, key=lambda x: x.get("port_id", 0))
-        port_len = len([p for p in ports if p["is_open"] and int(p["olt"]) == int(device)])
+        port_len = len([p for p in ports if p["is_open"] and int(p["olt"]) == int(olt_id)])
         elapsed_time = time.time()
         count = 0
         for port in ports:
-            if port["is_open"] and int(port["olt"]) == int(device):
+            if port["is_open"] and int(port["olt"]) == olt_id:
                 count += 1
                 fsp = f"{port['frame']}/{port['slot']}/{port['port']}"
                 logging.info(
@@ -73,7 +73,7 @@ def los_clients():
         end_time = time.time()
         ttl_time = end_time - start_time
         logging.info(
-            f"the ttl amount of time for a given olt [olt {device}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min"
+            f"the ttl amount of time for a given olt [olt {olt_id}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min"
         )
     # old_alarms = db_request(endpoints["get_alarms"], {})["data"]
 
