@@ -1,150 +1,91 @@
+import logging
 import os
-import string
 import time
-from helpers.constants.definitions import (
-    status_types,
-    desc_types,
-    payload,
-    endpoints,
-    state_types,
-)
-from dotenv import load_dotenv
 from helpers.handlers.hex_handler import hex_to_string
 from helpers.handlers.printer import log
 from helpers.handlers.request import db_request
-from pysnmp.hlapi import (
-    ObjectType,
-    ObjectIdentity,
-    bulkCmd,
-    SnmpEngine,
+from helpers.constants.definitions import (
+    endpoints,
+    state_types,
+    status_types,
+    fail_types,
 )
+from helpers.handlers.snmp_connection import SNMP
 
-load_dotenv()
 
 
-def los_clients(device, port_list, community, target, context):
-    non_repeaters = 10
-    max_repetitions = 10
-    CLIENTS = []
-    count = 0
+def los_clients(olt, olt_id):
     start_time = time.time()
-    for port in port_list:
-        if port["is_open"] and str(device) == str(port["olt"]):
+    snmp = SNMP(olt)
+    alarms = []
+    ONT_OIDS = [
+        (os.environ["SNMP_OID_POWER"], "power"),
+        (os.environ["SNMP_OID_DESCRIPCION"], "desc"),
+        (os.environ["SNMP_OID_LAST_DOWN_CAUSE"], "ldc"),
+        (os.environ["SNMP_OID_LAST_DOWN_DT"], "lddt"),
+        (os.environ["SNMP_OID_STATUS"], "status"),
+        (os.environ["SNMP_OID_STATE"], "state"),
+        (os.environ["SNMP_OID_MAC-SERIAL"], "serial"),
+    ]
+    ports = db_request(endpoints["get_ports"], {})["data"]
+    ports = sorted(ports, key=lambda x: x.get("port_id", 0))
+    port_len = len([p for p in ports if p["is_open"]])
+    elapsed_time = time.time()
+    count = 0
+    for port in ports:
+        if port["is_open"] and int(port["olt"]) == int(olt_id):
             count += 1
-            payload["lookup_type"] = "VP"
-            payload["lookup_value"] = {
-                "fsp": port["fspo"].split("-")[0],
-                "olt": port["fspo"].split("-")[1],
-            }
-            port_len = len([p for p in port_list if p["is_open"]])
-            elapsed_time = time.time()
-            log(
-                f'current fsp : {port["fspo"]:^9} | {count:>4}/{port_len:^4} || {(count/port_len)*100:.2f}% || elapsed time {(elapsed_time - start_time):.2f} s',
-                "info",
-                is_dynamic=True,
+            fsp = f"{port['frame']}/{port['slot']}/{port['port']}"
+            logging.info(
+                f'current fsp : {port["fspo"]:^9} | {count:>4}/{port_len:^4} || {(count/port_len)*100:.2f}% || elapsed time {(elapsed_time - start_time):.2f} s')
+            devices = snmp.execute_iterator(
+                [(f"{oid}.{port['oid']}", oid_type, fsp) for oid, oid_type in ONT_OIDS]
             )
-            clients_req = db_request(endpoints["get_clients"], payload)["data"]
-            for client in clients_req:
-                ont_id = "" if client["onu_id"] == 0 else f".{int(client['onu_id'])-1}"
-                oid_1 = ObjectType(
-                    ObjectIdentity(
-                        os.environ["SNMP_OID_DESCRIPCION"] + f'{port["oid"]}{ont_id}'
-                    )
-                )
-                oid_2 = ObjectType(
-                    ObjectIdentity(
-                        os.environ["SNMP_OID_STATUS"] + f'{port["oid"]}{ont_id}'
-                    )
-                )
-                oid_3 = ObjectType(
-                    ObjectIdentity(
-                        os.environ["SNMP_OID_MAC-SERIAL"] + f'{port["oid"]}{ont_id}'
-                    )
-                )
-                oid_4 = ObjectType(
-                    ObjectIdentity(
-                        os.environ["SNMP_OID_POWER"] + f'{port["oid"]}{ont_id}'
-                    )
-                )
-                oid_5 = ObjectType(
-                    ObjectIdentity(
-                        os.environ["SNMP_OID_LAST_DOWN_CAUSE"]
-                        + f'{port["oid"]}{ont_id}'
-                    )
-                )
-                oid_6 = ObjectType(
-                    ObjectIdentity(
-                        "1.3.6.1.4.1.2011.6.128.1.1.2.46.1.23."
-                        + f'{port["oid"]}{ont_id}'
-                    )
-                )  # hwGponDeviceOntControlLastDownTime
-                oid_7 = ObjectType(
-                    ObjectIdentity(
-                        os.environ["SNMP_OID_STATE"] + f'{port["oid"]}{ont_id}'
-                    )
-                )  # hwGponDeviceOntState
+            for device in devices:
+                device["contract"] = device["desc"].split(" ")[-1]
+                device["name_1"] = device["desc"].split(" ")[0]
+                device["name_2"] = device["desc"].split(" ")[1]
+                device["status"] = status_types[device["status"]]
+                device["state"] = state_types[device["state"]]
+                device["ldc"] = fail_types[device["ldc"]]
+                device["lddt"] = hex_to_string(device["lddt"])
+                device["ldd"] = device["lddt"][0]
+                device["ldt"] = device["lddt"][1]
 
-                error_indication, error_status, error_index, var_bind_table = next(
-                    bulkCmd(
-                        SnmpEngine(),
-                        community,
-                        target,
-                        context,
-                        non_repeaters,
-                        max_repetitions,
-                        oid_1,
-                        oid_2,
-                        oid_3,
-                        oid_4,
-                        oid_5,
-                        oid_6,
-                        oid_7,
-                    )
-                )
-                if error_indication is not None:
-                    continue
-                descr = f"{var_bind_table[0]}".split(" = ")[1]
-                ont = {
-                    "frame": client["frame"],
-                    "slot": client["slot"],
-                    "port": client["port"],
-                    "fsp": client["fsp"],
-                    "fspi": client["fspi"],
-                    "ont_id": client["onu_id"],
-                    "ont_descr": descr,
-                    "name_1": descr.split(" ")[0],
-                    "name_2": (
-                        descr.split(" ")[1] if len(descr.split(" ")) > 1 else " "
-                    ),
-                    "contract": descr.split(" ")[-1],
-                    "ont_status": status_types[f"{var_bind_table[1]}".split(" = ")[1]],
-                    "ont_serial": f"{var_bind_table[2]}".split(" = ")[1].replace(
-                        "0x", ""
-                    ),
-                    "ont_state": state_types[str(var_bind_table[6][1].prettyPrint())],
-                    "ont_power": int(f"{var_bind_table[3]}".split(" = ")[1]) / 100,
-                    "ont_ldc": desc_types[f"{var_bind_table[4]}".split(" = ")[1]],
-                    "ont_ldd": hex_to_string(var_bind_table[5][1].prettyPrint())[0],
-                    "ont_ldt": hex_to_string(var_bind_table[5][1].prettyPrint())[1],
-                    "plan_name_id": client["plan_name_id"],
-                    "spid": client["spid"],
-                    "device": client["device"]
-                    .replace("EchoLife", "")
-                    .translate({ord(c): None for c in string.whitespace}),
-                }
+            for device in devices:
                 if (
-                    ont["ont_status"] == "offline"
-                    and ont["ont_state"] == "active"
-                    and "LOS" in ont["ont_ldc"]
+                    "LOSi/LOBi" == device["ldc"]
+                    and "offline" == device["status"]
+                    and "active" == device["state"]
                 ):
-                    CLIENTS.append(
-                        {
-                            "contract": ont["contract"],
-                            "last_down_time": ont["ont_ldt"],
-                            "last_down_date": ont["ont_ldd"],
-                            "last_down_cause": ont["ont_ldc"],
-                            "name": f'{ont["name_1"]} {ont["name_2"]}',
-                            "plan_name_id": ont["plan_name_id"],
-                        }
-                    )
-    return CLIENTS
+                    alarm = {
+                        "contract": device["contract"],
+                        "last_down_time": device["ldt"],
+                        "last_down_date": device["ldd"],
+                        "last_down_cause": device["ldc"],
+                    }
+                    alarms.append(alarm)
+
+    old_alarms = db_request(endpoints["get_alarms"], {})["data"]
+
+    old_alarms_set = set(tuple(sorted(d.items())) for d in old_alarms)
+    alarms_set = set(tuple(sorted(d.items())) for d in alarms)
+
+    # Devices in the new alarms that are not in the old list of alarms
+    new_alarms = [dict(tpl) for tpl in alarms_set - old_alarms_set]
+
+    # Devices in both lists of alarms
+    updated_alarms = [dict(tpl) for tpl in alarms_set & old_alarms_set]
+
+    # Devices in the old list of alarms that are not in the new list of alarms
+    remove_alarms = [dict(tpl) for tpl in old_alarms_set - alarms_set]
+
+    db_request(endpoints["add_alarms"], {"alarms": new_alarms})
+    db_request(endpoints["update_alarm"], {"alarms": updated_alarms})
+    db_request(endpoints["remove_alarm"], {"alarms": remove_alarms})
+    end_time = time.time()
+    ttl_time = end_time - start_time
+    logging.info(
+        f"the ttl amount of time for a given olt [olt {olt_id}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min",
+        "info",
+    )

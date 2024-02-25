@@ -1,10 +1,10 @@
-import os
+import logging
+import threading
 import time
 from datetime import datetime
 from dotenv import load_dotenv
-from pysnmp.hlapi import CommunityData, ContextData, UdpTransportTarget
 from helpers.handlers.printer import log
-from helpers.constants.definitions import olt_devices, endpoints
+from helpers.constants.definitions import olt_devices, endpoints, log_file, log_date_format, log_format
 from helpers.handlers.request import db_request
 from scripts.CA import los_clients
 from helpers.handlers.mail_sender import send_mail
@@ -12,64 +12,56 @@ from helpers.handlers.mail_sender import send_mail
 load_dotenv()
 
 
-def main():
-    clients = []
-    log("worker running...", "info")
-    while True:
-        if bool(
-            datetime.now().strftime("%I:%M%p")
-            in ["11:30PM", "03:30AM", "07:30AM", "11:30AM", "03:30PM", "07:30PM"]
+from scripts.CA import los_clients
+
+
+class MainThread(threading.Thread):
+    def run(self):
+        log("main thread running...", "info")
+        while not bool(
+            datetime.now().strftime("%I%p") in ["07:45AM", "12:15PM", "04:15PM"]
         ):
-            # if True:
-            print("\n")
-            for olt in range(1, 3):
-                log(f"loop olt #{olt}", "info")
-                start_time = time.time()
-                community = CommunityData(os.environ["SNMP_COMMUNITY_DESCRIPCION"])
-                target = UdpTransportTarget((olt_devices[str(olt)], 161))
-                context = ContextData()
-                req = db_request(endpoints["get_ports"], {})["data"] or []
-                clts = los_clients(olt, req, community, target, context)
-                clients.extend(clts)
-                print("\n")
-                end_time = time.time()
-                ttl_time = end_time - start_time
-                log(
-                    f"the ttl amount of time for a given olt [olt {olt}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min",
-                    "info",
-                )
-            clients_set = set()
-            filtered_clients = [
-                item
-                for item in clients
-                if (contract := item["contract"]) not in clients_set
-                and not clients_set.add(contract)
-            ]
-            db_request(endpoints["empty_alarms"], {})
-            db_request(endpoints["add_alarms"], {"alarms": filtered_clients})
-            # while not bool(
-            #     datetime.now().strftime("%I%p")
-            #     in [
-            #         "12PM",
-            #         "04AM",
-            #         "08AM",
-            #         "12AM",
-            #         "04PM",
-            #         "08PM",
-            #         "03PM",
-            #     ]
-            # ):
-            #     log(
-            #         f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
-            #         "normal",
-            #         is_dynamic=True,
-            #     )
-            #     time.sleep(1)
-            print("\n")
-            # send_mail(filtered_clients)
-            print(filtered_clients)
-        print(datetime.now().strftime("%I:%M:%S%p"), end="\r")
+            log(
+                f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
+                "normal",
+                is_dynamic=True,
+            )
+            time.sleep(1)
+        print("\n")
+        alarms = db_request(endpoints["get_alarms"], {})["data"]
+        filtered_clients = []
+        for alarm in alarms:
+            client = db_request(
+                endpoints["get_client"],
+                {
+                    "lookup_type": "C",
+                    "lookup_value": {"contract": alarm["contract"], "olt": "*"},
+                },
+            )["data"]
+            filtered_clients.append(client)
+
+        send_mail(filtered_clients)
+
+
+class WorkerThread(threading.Thread):
+    def run(self):
+        logging.basicConfig(
+            filename=log_file,
+            level=logging.INFO,
+            format=log_format,
+            datefmt=log_date_format,
+        )
+        logging.info("worker running...")
+        while True:
+            for device in range(1, 3):
+                logging.info(f"loop olt #{device}")
+                olt = olt_devices[str(device)]
+                los_clients(olt, device)
+                time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
 
 
 if __name__ == "__main__":
-    main()
+    th1 = MainThread()
+    th1.start()
+    th2 = WorkerThread()
+    th2.start()
