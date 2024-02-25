@@ -84,6 +84,5 @@ def los_clients(olt, olt_id):
     end_time = time.time()
     ttl_time = end_time - start_time
     logging.info(
-        f"the ttl amount of time for a given olt [olt {olt_id}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min",
-        "info",
+        f"the ttl amount of time for a given olt [olt {olt_id}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min"
     )
