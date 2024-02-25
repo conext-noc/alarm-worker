@@ -19,7 +19,7 @@ class MainThread(threading.Thread):
     def run(self):
         log("main thread running...", "info")
         while not bool(
-            datetime.now().strftime("%I:%M%p") in ["07:45AM", "12:15PM", "04:15PM", "10:27AM"]
+            datetime.now().strftime("%I:%M%p") in ["07:45AM", "12:15PM", "04:15PM"]
         ):
             log(
                 f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
