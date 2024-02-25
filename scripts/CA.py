@@ -2,7 +2,6 @@ import logging
 import os
 import time
 from helpers.handlers.hex_handler import hex_to_string
-from helpers.handlers.printer import log
 from helpers.handlers.request import db_request
 from helpers.constants.definitions import (
     endpoints,
