@@ -41,9 +41,8 @@ def los_clients(olt, olt_id):
                 [(f"{oid}.{port['oid']}", oid_type, fsp) for oid, oid_type in ONT_OIDS]
             )
             for device in devices:
-                device["contract"] = device["desc"].split(" ")[-1]
-                device["name_1"] = device["desc"].split(" ")[0]
-                device["name_2"] = device["desc"].split(" ")[1]
+                device["contract"] = device["desc"].split()[-1]
+                device["name"] = device["desc"].split(" ")[:-1]
                 device["status"] = status_types[device["status"]]
                 device["state"] = state_types[device["state"]]
                 device["ldc"] = fail_types[device["ldc"]]
