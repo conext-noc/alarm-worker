@@ -44,7 +44,6 @@ def main():
                 )
                 time.sleep(1)
             print("\n")
-            print(resp)
             sending_mail(resp)
             
             
