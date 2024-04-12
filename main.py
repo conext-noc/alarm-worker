@@ -57,11 +57,11 @@ class WorkerThread(threading.Thread):
         logging.info("worker running...")
         while True:
             los_clients()
-            # time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
+            time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
 
 
 if __name__ == "__main__":
-    # th1 = MainThread()
-    # th1.start()
+    th1 = MainThread()
+    th1.start()
     th2 = WorkerThread()
     th2.start()

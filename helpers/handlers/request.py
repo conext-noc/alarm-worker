@@ -16,6 +16,7 @@ def db_request(endpoint: str, data: dict):
     url = f"{domain}{endpoint}"
     try:
         response = requests.post(url, data=payload, headers=headers, verify=False)
+        print(response.status_code, url)
         if response.status_code != requests.codes.ok:
             return {
                 "error": True,

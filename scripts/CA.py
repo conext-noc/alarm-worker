@@ -1,5 +1,7 @@
+import json
 import logging
 import os
+import re
 import time
 from helpers.handlers.hex_handler import hex_to_string
 from helpers.handlers.request import db_request
@@ -11,6 +13,9 @@ from helpers.constants.definitions import (
     olt_devices,
 )
 from helpers.handlers.snmp_connection import SNMP
+
+def validate_contract(contract: str) -> bool:
+    return re.match(r'^\d{10}$', contract) is not None
 
 
 def los_clients():
@@ -31,7 +36,9 @@ def los_clients():
         snmp = SNMP(olt)
         ports = db_request(endpoints["get_ports"], {})["data"]
         ports = sorted(ports, key=lambda x: x.get("port_id", 0))
-        port_len = len([p for p in ports if p["is_open"] and int(p["olt"]) == int(olt_id)])
+        port_len = len(
+            [p for p in ports if p["is_open"] and int(p["olt"]) == int(olt_id)]
+        )
         elapsed_time = time.time()
         count = 0
         for port in ports:
@@ -39,7 +46,7 @@ def los_clients():
                 count += 1
                 fsp = f"{port['frame']}/{port['slot']}/{port['port']}"
                 logging.info(
-                    f'current fsp : {port["fspo"]:^9} | {count:>4}/{port_len:^4} || {(count/port_len)*100:.2f}% || elapsed time {(elapsed_time - start_time):.2f} s'
+                    f'current fsp : {port["fspo"]:^9} | {count:>4}/{port_len:^4} || {(count/port_len)*100:.2f}% || elapsed time {(elapsed_time - start_time):.2f} s', 
                 )
                 devices = snmp.execute_iterator(
                     [
@@ -56,12 +63,13 @@ def los_clients():
                     device["lddt"] = hex_to_string(device["lddt"])
                     device["ldd"] = device["lddt"][0]
                     device["ldt"] = device["lddt"][1]
-
+                alarm_count = 0
                 for device in devices:
                     if (
                         "LOSi/LOBi" == device["ldc"]
                         and "offline" == device["status"]
                         and "active" == device["state"]
+                        and validate_contract(contract=device["contract"])
                     ):
                         alarm = {
                             "contract": device["contract"],
@@ -70,27 +78,16 @@ def los_clients():
                             "last_down_cause": device["ldc"],
                         }
                         alarms.append(alarm)
+                        alarm_count += 1
+                logging.info(
+                    f"TTL of processed devices {len(devices)} | TTL of alarmed devices for {fsp} {alarm_count} | TTL alarmed devices in current run {len(alarms)}"
+                )
         end_time = time.time()
         ttl_time = end_time - start_time
         logging.info(
             f"the ttl amount of time for a given olt [olt {olt_id}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min"
         )
-    # old_alarms = db_request(endpoints["get_alarms"], {})["data"]
 
-    # old_alarms_set = set(tuple(sorted(d.items())) for d in old_alarms)
-    # alarms_set = set(tuple(sorted(d.items())) for d in alarms)
-
-    # # Devices in the new alarms that are not in the old list of alarms
-    # new_alarms = [dict(tpl) for tpl in alarms_set - old_alarms_set]
-
-    # # Devices in both lists of alarms
-    # updated_alarms = [dict(tpl) for tpl in alarms_set & old_alarms_set]
-
-    # # Devices in the old list of alarms that are not in the new list of alarms
-    # remove_alarms = [dict(tpl) for tpl in old_alarms_set - alarms_set]
-
-    # db_request(endpoints["add_alarms"], {"alarms": new_alarms})
-    # db_request(endpoints["update_alarm"], {"alarms": updated_alarms})
-    # db_request(endpoints["remove_alarm"], {"alarms": remove_alarms})
     db_request(endpoints["empty_alarms"], {})
+    print(json.dumps({"alarms": alarms}), file=open(f"db_data_{int(time.time()//1)}.txt"))
     db_request(endpoints["add_alarms"], {"alarms": alarms})
