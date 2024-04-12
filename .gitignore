@@ -14,7 +14,6 @@ aws/
 *.xlsx
 *.pyc
 *.log
-worker.log
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

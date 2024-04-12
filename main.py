@@ -19,7 +19,7 @@ class MainThread(threading.Thread):
     def run(self):
         log("main thread running...", "info")
         while not bool(
-            datetime.now().strftime("%I:%M%p") in ["07:45AM", "12:15PM", "04:15PM"]
+            datetime.now().strftime("%I:%M%p") in ["07:45AM", "12:15PM", "04:15PM", ]
         ):
             log(
                 f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
@@ -57,11 +57,11 @@ class WorkerThread(threading.Thread):
         logging.info("worker running...")
         while True:
             los_clients()
-            time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
+            # time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
 
 
 if __name__ == "__main__":
-    th1 = MainThread()
-    th1.start()
+    # th1 = MainThread()
+    # th1.start()
     th2 = WorkerThread()
     th2.start()
