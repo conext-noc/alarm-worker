@@ -4,7 +4,13 @@ import time
 from datetime import datetime
 from dotenv import load_dotenv
 from helpers.handlers.printer import log
-from helpers.constants.definitions import olt_devices, endpoints, log_file, log_date_format, log_format
+from helpers.constants.definitions import (
+    olt_devices,
+    endpoints,
+    log_file,
+    log_date_format,
+    log_format,
+)
 from helpers.handlers.request import db_request
 from scripts.CA import los_clients
 from helpers.handlers.mail_sender import send_mail
@@ -19,7 +25,12 @@ class MainThread(threading.Thread):
     def run(self):
         log("main thread running...", "info")
         while not bool(
-            datetime.now().strftime("%I:%M%p") in ["07:45AM", "12:15PM", "04:15PM", ]
+            datetime.now().strftime("%I:%M%p")
+            in [
+                "07:45AM",
+                "12:15PM",
+                "04:15PM",
+            ]
         ):
             log(
                 f"Waiting for the condition to be met... |{datetime.now().strftime('%I:%M:%S%p')}",
@@ -42,8 +53,8 @@ class MainThread(threading.Thread):
             client["last_down_date"] = alarm["last_down_date"]
             client["last_down_cause"] = alarm["last_down_cause"]
             filtered_clients.append(client)
-
-        send_mail(filtered_clients)
+        if len(filtered_clients) > 0:
+            send_mail(filtered_clients)
 
 
 class WorkerThread(threading.Thread):
@@ -55,7 +66,14 @@ class WorkerThread(threading.Thread):
             datefmt=log_date_format,
         )
         logging.info("worker running...")
-        while True:
+        while not bool(
+            datetime.now().strftime("%I:%M%p")
+            in [
+                "07:45AM",
+                "12:15PM",
+                "04:15PM",
+            ]
+        ):
             los_clients()
             time.sleep(2 * 60 * 60)  # hours * min * secs = 7200 secs === 2 hours
 

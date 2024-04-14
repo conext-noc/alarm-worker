@@ -89,5 +89,5 @@ def los_clients():
         )
 
     db_request(endpoints["empty_alarms"], {})
-    print(json.dumps({"alarms": alarms}), file=open(f"db_data_{int(time.time()//1)}.txt"))
+    print(json.dumps({"alarms": alarms}), file=open(f"db_data_{int(time.time()//1)}.txt", "w"))
     db_request(endpoints["add_alarms"], {"alarms": alarms})
