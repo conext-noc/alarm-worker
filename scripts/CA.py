@@ -10,6 +10,7 @@ import threading
 import time
 from helpers.handlers.printer import log
 from copy import copy
+import re
 
 
 threads = []
@@ -20,7 +21,6 @@ def CA(olt_ip):
     
     DESCRIPTION = os.getenv("SNMP_COMMUNITY_DESCRIPCION")
     start_time = time.time()
-
     resp = CA_snmp(DESCRIPTION,olt_ip,snmp_oid["descr"],snmp_oid["power"],snmp_oid["status"],snmp_oid["ldc"],snmp_oid["state"],snmp_oid["lddt"],snmp_oid["serial"])
     end_time = time.time()
     ttl_time = end_time - start_time
@@ -70,13 +70,21 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
         for keys,value in new_datos.items():
             
             if ('State' in value and value['State'] == "active") and value['Status'] == "offline" and value['Last_Down_Cause'] == "LOSi/LOBi":
-                name = value['name'].split()[:-1]
-                contract = value['name'].split()[-1]
+                desc = re.split(r"[\s_]+", value['name'])
+                name = f"{desc[0]} {desc[1]}"
+                try:
+                    
+                    contract = re.search("000\d{7}", value['name']).group()
+                    if(contract == None):
+                        contract = re.search("000\d{6}", value['name']).group()
+                except AttributeError:
+                    contract = "0000000000"
+                # contract = value['name'].split()[-1]
                 last_down_date_in_days = value['Last_Down_Time'].split()[0]
                 last_down_time_in_hours = value['Last_Down_Time'].split()[1]
                 table.append({
                     "contract":contract,
-                    "name":f"{name[0]} {name[1]}" if len(name) > 1 else  f"{value['name']}",
+                    "name":name if len(desc) > 1 else  f"{value['name']}",
                     "last_down_time":last_down_time_in_hours,
                     "last_down_date":last_down_date_in_days,
                     "last_down_cause":value['Last_Down_Cause'],
@@ -88,5 +96,10 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
         
 
 def sending_mail(data):
-    send_mail(data)
+    # Check if data is a list containing a single list
+    if isinstance(data, list) and len(data) == 1 and isinstance(data[0], list):
+        send_mail(data[0]) # Pass the inner list to send_mail
+    else:
+        send_mail(data) # Otherwise, pass data directly
     table.clear()
+

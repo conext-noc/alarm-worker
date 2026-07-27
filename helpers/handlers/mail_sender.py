@@ -18,8 +18,10 @@ from helpers.handlers.printer import log
 
 load_dotenv()
 
-sender_password = os.environ["mail_pass"]
+sender_password = os.environ["app_password"]
 
+# Temporal: Imprimir la contraseña cargada para depuración
+print(f"Contraseña cargada (temporal): {sender_password}")
 
 def send_mail(clients):
     dt = datetime.now().strftime("%d/%m/%Y - %I:%M%p")

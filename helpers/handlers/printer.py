@@ -1,5 +1,6 @@
 from datetime import datetime
 import userpaths
+import os
 
 
 docs = userpaths.get_my_documents()
@@ -34,13 +35,17 @@ def log(value, variant, is_dynamic=False):
     currTime = datetime.now()
     now = f"[{currTime.hour}:{currTime.minute}:{currTime.second}]"
     print(color_formatter(value, variant)) if not is_dynamic else print(color_formatter(value, variant), end='\r')
+    os.makedirs(f"{docs}/logs", exist_ok=True)
     print(f"{now}\n{value}", file=open(f"{docs}/logs/{fl}", "a", encoding="utf-8"))
-
 
 def inp(message):
     currTime = datetime.now()
     now = f"[{currTime.hour}:{currTime.minute}:{currTime.second}]"
     data = input(message).upper()
+    print(
+        f"{now}\n{message} {data}",
+    )
+    os.makedirs(f"{docs}/logs", exist_ok=True)
     print(
         f"{now}\n{message} {data}",
         file=open(f"{docs}/logs/{fl}", "a", encoding="utf-8"),

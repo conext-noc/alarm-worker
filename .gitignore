@@ -1,7 +1,7 @@
 __pycache__/
 **/__pycache__/
 **/**/__pycache__/
-.venvs/
+venv/
 .vscode/
 aws/
 *.zip
@@ -13,6 +13,9 @@ aws/
 *.csv
 *.xlsx
 *.pyc
+*.Identifier
+*.tar
+*.tar.tmp
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
