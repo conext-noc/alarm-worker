@@ -23,9 +23,12 @@ sender_password = os.environ["app_password"]
 # Temporal: Imprimir la contraseña cargada para depuración
 print(f"Contraseña cargada (temporal): {sender_password}")
 
-def send_mail(clients):
+def send_mail(clients, subject_override=None):
     dt = datetime.now().strftime("%d/%m/%Y - %I:%M%p")
-    subject = mail_subject + dt
+    if subject_override:
+        subject = subject_override
+    else:
+        subject = mail_subject + dt
     log(subject, "info")
     table_rows = ""
     t_greet = datetime.now().time().hour

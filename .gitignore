@@ -2,6 +2,9 @@ __pycache__/
 **/__pycache__/
 **/**/__pycache__/
 venv/
+.venv
+.venv/
+debug/
 .vscode/
 aws/
 *.zip
@@ -20,3 +23,6 @@ aws/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+# Archivos de prueba temporales
+test_*.py
+*.log

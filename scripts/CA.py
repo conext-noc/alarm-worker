@@ -13,28 +13,28 @@ from copy import copy
 import re
 
 
-threads = []
-table = []
 load_dotenv()
 
 def CA(olt_ip):
     
     DESCRIPTION = os.getenv("SNMP_COMMUNITY_DESCRIPCION")
     start_time = time.time()
-    resp = CA_snmp(DESCRIPTION,olt_ip,snmp_oid["descr"],snmp_oid["power"],snmp_oid["status"],snmp_oid["ldc"],snmp_oid["state"],snmp_oid["lddt"],snmp_oid["serial"])
+    resp_table = CA_snmp(DESCRIPTION,olt_ip,snmp_oid["descr"],snmp_oid["power"],snmp_oid["status"],snmp_oid["ldc"],snmp_oid["state"],snmp_oid["lddt"],snmp_oid["serial"])
     end_time = time.time()
     ttl_time = end_time - start_time
     log(
                     f"the ttl amount of time for a given olt [olt {olt_ip}] [max] is : {ttl_time:.2f} secs | {(ttl_time/60):.2f} min",
                     "info",
                 )
-    # null_datos
+    null_datos()
     
-    return table
+    return resp_table
 
 
         
 def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_status,oid_last_down_time,oid_sn):
+    threads = []
+    local_table = []
     seguir = True
     while seguir:
         #DESCRIPTION
@@ -82,24 +82,22 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
                 # contract = value['name'].split()[-1]
                 last_down_date_in_days = value['Last_Down_Time'].split()[0]
                 last_down_time_in_hours = value['Last_Down_Time'].split()[1]
-                table.append({
+                local_table.append({
                     "contract":contract,
                     "name":name if len(desc) > 1 else  f"{value['name']}",
                     "last_down_time":last_down_time_in_hours,
                     "last_down_date":last_down_date_in_days,
                     "last_down_cause":value['Last_Down_Cause'],
                 })
-                # table[keys] += new_datos[keys]
 
-                new_datos[keys].clear()
         seguir = False
+    return local_table
         
 
-def sending_mail(data):
+def sending_mail(data, subject_override=None):
     # Check if data is a list containing a single list
     if isinstance(data, list) and len(data) == 1 and isinstance(data[0], list):
-        send_mail(data[0]) # Pass the inner list to send_mail
+        send_mail(data[0], subject_override) # Pass the inner list to send_mail
     else:
-        send_mail(data) # Otherwise, pass data directly
-    table.clear()
+        send_mail(data, subject_override) # Otherwise, pass data directly
 

@@ -14,6 +14,7 @@ OPERATION = {
 }
 
 def null_datos():
+    global datos
     datos.clear()
     datos = {}
     print(datos)
@@ -42,28 +43,32 @@ def SNMP_Master(op,community, host, oid,port,type_request,fsp_inicial=""):
                 ont_id = varBind[0].prettyPrint().split('.')[-1]
                 resp = varBind[1].prettyPrint()
 
-                if type_request=="desc":
-                    datos[fsp+"-"+ont_id] = {
-                            "fsp": fsp,
-                            "ont_id": ont_id,
-                            "name": resp,
-                            "State": "",
-                            "Status": "",
-                            "Sn":"",
-                            "Potencia": -0,
-                            "Last_Down_Cause": "",
-                            "Last_Down_Time": "",
-                        } 
-                elif type_request=="status":
+                key = fsp + "-" + ont_id
+                if key not in datos:
+                    datos[key] = {
+                        "fsp": fsp,
+                        "ont_id": ont_id,
+                        "name": "",
+                        "State": "",
+                        "Status": "",
+                        "Sn": "",
+                        "Potencia": -0,
+                        "Last_Down_Cause": "",
+                        "Last_Down_Time": "",
+                    }
+
+                if type_request == "desc":
+                    datos[key]["name"] = resp
+                elif type_request == "status":
                     if resp in status_types:
-                        datos[fsp+"-"+ont_id]['Status'] =status_types[resp]
-                elif type_request=="ldc":
-                    datos[fsp+"-"+ont_id]['Last_Down_Cause'] = check_ldc(resp)
-                elif type_request=="ldt":
-                    datos[fsp+"-"+ont_id]['Last_Down_Time'] = date_hex_formatter(resp)
-                elif type_request=="state":
+                        datos[key]['Status'] = status_types[resp]
+                elif type_request == "ldc":
+                    datos[key]['Last_Down_Cause'] = check_ldc(resp)
+                elif type_request == "ldt":
+                    datos[key]['Last_Down_Time'] = date_hex_formatter(resp)
+                elif type_request == "state":
                     if resp in state_types:
-                        datos[fsp+"-"+ont_id]['State'] =state_types[resp]
-                elif type_request=="sn":
-                    datos[fsp+"-"+ont_id]['Sn'] = check_sn(resp)
+                        datos[key]['State'] = state_types[resp]
+                elif type_request == "sn":
+                    datos[key]['Sn'] = check_sn(resp)
                 

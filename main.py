@@ -11,36 +11,46 @@ from helpers.handlers.mail_sender import send_mail
 
 
 global last_resp
+global last_scan_time
 last_resp = []
+last_scan_time = None
 load_dotenv()
 
 # Definir la función que contiene la lógica principal y el envío de correo condicional
 def execute_worker_tasks():
     print("\n")
     global last_resp
+    global last_scan_time
     resp = [] # Inicializar resp antes del bucle
-    for olt in range(1, 3):
-        log(f"loop olt #{olt}", "info")
-        # community = CommunityData(os.environ["SNMP_COMMUNITY_DESCRIPCION"])
-        # Asumiendo que CA devuelve la respuesta que necesitas para resp
-        current_resp = CA(olt_devices[str(olt)])
+    for olt_id in olt_devices.keys():
+        log(f"loop olt #{olt_id}", "info")
+        current_resp = CA(olt_devices[olt_id])
         print(current_resp)
-        # if isinstance(current_resp, list): # Verificar si es una lista antes de extender
-        #      resp.append(current_resp) # Acumular respuestas si CA devuelve una lista
-        # else:
-        #      # Si CA no devuelve una lista, manejar según sea necesario.
-        #      # Por ahora, simplemente añadir el resultado si no es None.
-        #      if current_resp is not None:
-        #         resp.append(current_resp)
+        
+        if isinstance(current_resp, list):
+            resp.extend(current_resp)
                 
         print("\n")
 
-    # print(resp)
     db_request(endpoints["empty_alarms"], {})
     db_request(endpoints["add_alarms"], {"alarms": resp})
 
-    resp.append(current_resp)
+    current_count = len(resp)
+    last_count = len(last_resp)
+
+    if last_scan_time is not None:
+        diff_time = datetime.now() - last_scan_time
+        minutes_passed = int(diff_time.total_seconds() / 60)
+        x_tiempo = f"{minutes_passed} minutos"
+        
+        if current_count >= last_count + 5 or current_count >= last_count * 1.05:
+            increment = current_count - last_count
+            custom_subject = f"ALERTA DE AVERIA. Incremento de {increment} clientes desconectados en {x_tiempo} (Total: {current_count})"
+            log(f"Alerta detectada: {custom_subject}", "warning")
+            sending_mail(resp, subject_override=custom_subject)
+
     last_resp = resp
+    last_scan_time = datetime.now()
     # print(filtered_clients)
 
 
@@ -53,15 +63,9 @@ def send_scheduled_mail():
 def main():
     log("worker running...", "info")
 
-    # Horas programadas para ejecutar las tareas principales (SNMP, DB, y verificación de envío de correo)
-    scheduled_run_times = ["03:30AM","05:30AM","07:30AM","09:30AM","10:30AM","12:00PM","02:30PM","04:00PM","06:30PM","08:30PM","10:30PM","12:00AM"]
-
-    # Configurar el planificador para ejecutar la función en las horas especificadas
-    for run_time in scheduled_run_times:
-        dt_obj = datetime.strptime(run_time, "%I:%M%p")
-        schedule_time = dt_obj.strftime("%H:%M")
-        schedule.every().day.at(schedule_time).do(execute_worker_tasks)
-        log(f"Tarea programada para ejecutarse a las {run_time}", "info")
+    # Configurar el planificador para ejecutar la recolección cada 30 minutos
+    schedule.every(30).minutes.do(execute_worker_tasks)
+    log("Tarea programada para ejecutarse dinámicamente cada 30 minutos.", "info")
 
     # Horas programadas para enviar correo
     mail_send_times = ["07:45AM","12:15PM","04:15PM"] # Horas para enviar correo
