@@ -79,6 +79,13 @@ def main():
         log(f"Correo programado para enviarse a las {mail_time} ({schedule_time})", "info")
 
 
+    # Ejecutar al menos una vez al iniciar el contenedor para no esperar 30 mins
+    log("Ejecutando primera recolección de arranque...", "info")
+    try:
+        execute_worker_tasks()
+    except Exception as e:
+        log(f"Error en la ejecución de arranque: {e}", "warning")
+
     # Bucle principal para ejecutar tareas pendientes del planificador
     while True:
         schedule.run_pending()
