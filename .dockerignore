@@ -1,0 +1,6 @@
+*.tar
+*.tar.tmp
+.venv
+.git
+__pycache__
+*.pyc

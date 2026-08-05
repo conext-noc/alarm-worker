@@ -30,17 +30,26 @@ def send_mail(clients, subject_override=None):
     else:
         subject = mail_subject + dt
     log(subject, "info")
-    table_rows = ""
     t_greet = datetime.now().time().hour
     greet = "Buenos Días" if t_greet < 12 else "Buenas Tardes" if 12 <= t_greet < 18 else "Buenas Noches"
+    
+    from collections import defaultdict
+    grouped = defaultdict(list)
     for client in clients:
-        print()
-        table_rows += f'<tr><td>{client["contract"]}</td><td>{client["name"]}</td><td>{client["last_down_time"]}</td><td>{client["last_down_date"]}</td><td>{client["last_down_cause"]}</td></tr>'
-    table = mail_table.format(rows=table_rows)
+        olt = client.get('olt_name', 'OLT Desconocida')
+        grouped[olt].append(client)
+        
+    html_content = ""
+    for olt_name, clist in grouped.items():
+        table_rows = ""
+        for client in clist:
+            table_rows += f'<tr><td>{client.get("contract", "")}</td><td>{client.get("name", "")}</td><td>{client.get("last_down_time", "")}</td><td>{client.get("last_down_date", "")}</td><td>{client.get("last_down_cause", "")}</td></tr>'
+        html_content += mail_table.format(olt_name=olt_name, rows=table_rows)
+
     message = mail_message.format(greet=greet)
 
     plain_message = MIMEText(message, "plain")
-    html_message = MIMEText(table, "html")
+    html_message = MIMEText(html_content, "html")
 
     msg = MIMEMultipart()
     msg["From"] = mail_sender

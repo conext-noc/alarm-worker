@@ -19,24 +19,20 @@ olt_devices = {"1": "181.232.180.7", "2": "181.232.180.5", "3": "181.232.180.6"}
 
 mail_message = "{greet}, Saludos...\nPor favor comunicarse con los siguientes clientes para corroborar el estado de su servicio, ya que presentan alarma por corte de fibra óptica\n"
 
-mail_recipients = ["cesar.sanchez@conext.com.ve"]
-# mail_ccs = ["cesar.sanchez@conext.com.ve"]
 mail_recipients = [
-    "soporte.oz.1@conext.com.ve",
-    "soporte.oz.2@conext.com.ve",
-    "dikson.chavez@conext.com.ve",
-    "guillermo.rios@conext.com.ve",
-    "yesenia.montiel@conext.com.ve",
-    "operaciones@conext.com.ve",
-    "eduardo.rangel@conext.com.ve",
+    "carlos.rodriguez@conext.com.ve",
+    "jose.cardozo@conext.com.ve",
+    "victor.villalobos@conext.com.ve",
+    "cesar.sanchez@conext.com.ve",
 ]
-mail_ccs = ['noc@conext.com.ve']
+mail_ccs = []
 
 mail_sender = "noc@conext.com.ve"
 mail_server = "smtp.gmail.com"
 mail_port = 587
 mail_subject = "CLIENTES CON AVERIAS "
 mail_table = """
+<h3>{olt_name}</h3>
 <table border="1" cellpadding="5">
   <tr>
     <th>CONTRATO</th>
@@ -47,6 +43,7 @@ mail_table = """
   </tr>
   {rows}
 </table>
+<br>
 """
 
 

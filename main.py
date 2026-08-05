@@ -25,9 +25,22 @@ def execute_worker_tasks():
     for olt_id in olt_devices.keys():
         log(f"loop olt #{olt_id}", "info")
         current_resp = CA(olt_devices[olt_id])
+        
+        # Asignar el nombre de la OLT según su ID
+        if str(olt_id) == "1":
+            olt_name = "OLT 1 la lago"
+        elif str(olt_id) == "2":
+            olt_name = "OLT2 Oeste"
+        elif str(olt_id) == "3":
+            olt_name = "OLT3 Giharro"
+        else:
+            olt_name = f"OLT {olt_id}"
+            
         print(current_resp)
         
         if isinstance(current_resp, list):
+            for client in current_resp:
+                client['olt_name'] = olt_name
             resp.extend(current_resp)
                 
         print("\n")
@@ -83,6 +96,8 @@ def main():
     log("Ejecutando primera recolección de arranque...", "info")
     try:
         execute_worker_tasks()
+        log("Enviando correo con reporte inicial de arranque...", "info")
+        send_scheduled_mail()
     except Exception as e:
         log(f"Error en la ejecución de arranque: {e}", "warning")
 

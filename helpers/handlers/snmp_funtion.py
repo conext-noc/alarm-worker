@@ -16,7 +16,6 @@ OPERATION = {
 def null_datos():
     global datos
     datos.clear()
-    datos = {}
     print(datos)
 
                     
