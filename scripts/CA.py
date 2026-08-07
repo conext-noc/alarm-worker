@@ -94,10 +94,11 @@ def CA_snmp(comunity,host,oid_desc,oid_pw,oid_state,oid_last_down_couse,oid_stat
     return local_table
         
 
-def sending_mail(data, subject_override=None):
+def sending_mail(data, subject_override=None, cajeras_alertas=None):
     # Check if data is a list containing a single list
     if isinstance(data, list) and len(data) == 1 and isinstance(data[0], list):
-        send_mail(data[0], subject_override) # Pass the inner list to send_mail
+        send_mail(data[0], subject_override, cajeras_alertas=cajeras_alertas)
     else:
-        send_mail(data, subject_override) # Otherwise, pass data directly
+        send_mail(data, subject_override, cajeras_alertas=cajeras_alertas)
+
 

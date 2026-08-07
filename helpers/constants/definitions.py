@@ -20,10 +20,20 @@ olt_devices = {"1": "181.232.180.7", "2": "181.232.180.5", "3": "181.232.180.6"}
 mail_message = "{greet}, Saludos...\nPor favor comunicarse con los siguientes clientes para corroborar el estado de su servicio, ya que presentan alarma por corte de fibra óptica\n"
 
 mail_recipients = [
-    "carlos.rodriguez@conext.com.ve",
-    "jose.cardozo@conext.com.ve",
-    "victor.villalobos@conext.com.ve",
-    "cesar.sanchez@conext.com.ve",
+    # "soporte.01@conext.com.ve",
+    # "soporte.02@conext.com.ve",
+    # "dikson.chavez@conext.com.ve",
+    # "guillermo.rios@conext.com.ve",
+    # "yesenia.montiel@conext.com.ve",
+    # "operaciones@conext.com.ve",
+    # "eduardo.rangel@conext.com.ve",
+    # "roberto.moreno@conext.com.ve",
+    # "carlos.rodriguez@conext.com.ve",
+    # "victor.villalobos@conext.com.ve",
+    # "cesar.sanchez@conext.com.ve",
+    # "jose.morales@conext.com.ve",
+    "jose.cardozo@conext.com.ve"
+    
 ]
 mail_ccs = []
 
@@ -40,10 +50,56 @@ mail_table = """
     <th>HORA DE AVERIA</th>
     <th>DIA DE AVERIA</th>
     <th>CAUSA</th>
+    <th>ELEMENTO</th>
+    <th>FSP</th>
   </tr>
   {rows}
 </table>
 <br>
+"""
+
+mail_massive_cajera = """
+<h3>ALERTA MASIVA DE CAJERA (FAT/MDU)</h3>
+<p style="color:red; font-size:16px;"><b>El FAT o MDU {elemento} se encuentra con {caidos} clientes en corte, siendo este de {total} clientes. Verificar por favor.</b></p>
+<table border="1" cellpadding="5">
+  <tr>
+    <th>CONTRATO</th>
+    <th>CLIENTE</th>
+    <th>HORA DE AVERIA</th>
+    <th>DIA DE AVERIA</th>
+    <th>CAUSA</th>
+    <th>ELEMENTO</th>
+    <th>FSP</th>
+  </tr>
+  {rows}
+</table>
+<br>
+"""
+
+mail_massive_fsp = """
+<h3>ALERTA MASIVA DE PUERTO PON (EMPALME/FSP)</h3>
+<p style="color:red; font-size:16px;"><b>Caída masiva detectada en el puerto FSP {fsp}. Posible afectación de cajera de empalme o puerto PON. {caidos} clientes afectados.</b></p>
+<table border="1" cellpadding="5">
+  <tr>
+    <th>CONTRATO</th>
+    <th>CLIENTE</th>
+    <th>HORA DE AVERIA</th>
+    <th>DIA DE AVERIA</th>
+    <th>CAUSA</th>
+    <th>ELEMENTO</th>
+    <th>FSP</th>
+  </tr>
+  {rows}
+</table>
+<br>
+"""
+
+mail_no_clients_subject = "SIN CLIENTES EN CORTE - "
+mail_no_clients_body = """
+<h2 style="color: green;">✅ Sin clientes en corte</h2>
+<p>Se ha realizado el escaneo de todas las OLTs y no se han detectado clientes con avería por corte de fibra óptica.</p>
+<p><b>Fecha del escaneo:</b> {fecha}</p>
+<p>Este es un correo informativo automático del sistema de alarmas NOC.</p>
 """
 
 
